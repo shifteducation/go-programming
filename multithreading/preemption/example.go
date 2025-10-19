@@ -9,15 +9,16 @@ import (
 func main() {
 	runtime.GOMAXPROCS(1)
 	go func() {
-		var u int
+		var u int16
 		for {
 			u -= 2
-			if u == 1 {
+			if u == 1 { // never happens
 				break
 			}
 		}
 	}()
-	<-time.After(time.Millisecond * 5)
+	t := <-time.After(time.Millisecond * 5)
+	fmt.Println(t)
 
 	fmt.Println("go 1.13 has never been here")
 }

@@ -44,6 +44,7 @@ func main() {
 	handleSqrt()
 	checkIs()
 	checkAs()
+	fmt.Println(checkDefer(1))
 }
 
 func handleSqrt() {
@@ -56,8 +57,7 @@ func handleSqrt() {
 
 func checkIs() {
 	ErrInvalidValue := errors.New("invalid  value")
-	err := ErrInvalidValue
-	err = fmt.Errorf("wrapped:  %w", err)
+	err := fmt.Errorf("wrapped:  %w", ErrInvalidValue)
 	fmt.Println("isErrInvalidValue: ", errors.Is(err, ErrInvalidValue))
 
 	// -------
@@ -74,9 +74,17 @@ func checkIs() {
 func checkAs() {
 	input := badInput
 
-	err := fmt.Errorf("wrapped: %w", &BadInputError{input: input})
-	var badInputErr *BadInputError
+	err := fmt.Errorf("wrapped: %w", BadInputError{input: input})
+	var badInputErr BadInputError
 	if errors.As(err, &badInputErr) {
 		fmt.Printf("bad input error occured: %s\n", badInputErr)
 	}
+}
+
+func checkDefer(i int) int {
+	defer func() int {
+		i++
+		return i
+	}() // todo check
+	return i
 }

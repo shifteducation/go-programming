@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	//arrayExamples()
+	arrayExamples()
 	sliceExamples()
 }
 
@@ -50,10 +50,16 @@ func sliceExamples() {
 	s = append(s[:2], s[2+1:]...)
 	fmt.Println(s)
 
+	sl := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	sl2 := make([]int, 2)
+	copy(sl2, sl)
+	sl2[0] = 1
+	fmt.Println(sl, sl2)
+
 	ints4 := make([]int, 3, 4)
 	ints5 := append(ints4, 1)
 	ints5[0] = 1
-	fmt.Println(ints4, ints5)
+	fmt.Println(ints4, ints5) // 1 0 0, 1 0 0 1
 
 	ints6 := append(ints5, 2)
 	ints6[0] = 2

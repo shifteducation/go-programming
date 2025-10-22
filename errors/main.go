@@ -41,9 +41,9 @@ func (e BadInputError) Error() string {
 }
 
 func main() {
-	handleSqrt()
-	checkIs()
-	checkAs()
+	//handleSqrt()
+	//checkIs()
+	//checkAs()
 	fmt.Println(checkDefer(1))
 }
 
@@ -81,10 +81,10 @@ func checkAs() {
 	}
 }
 
-func checkDefer(i int) int {
+func checkDefer(i int) (x int) {
 	defer func() int {
-		i++
-		return i
-	}() // todo check
+		x++
+		return x
+	}()
 	return i
 }

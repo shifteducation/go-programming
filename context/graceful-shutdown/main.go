@@ -29,7 +29,7 @@ func main() {
 	}()
 
 	s := <-ch
-	log.Printf("Receved %v signal, shutting down server\n", s)
+	log.Printf("Received %v signal, shutting down server\n", s)
 	if err := server.Shutdown(context.Background()); err != nil {
 		log.Printf("Error while shutting down server, %s\n", err.Error())
 	}

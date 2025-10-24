@@ -1,4 +1,4 @@
-module shift/go-basics/algorithm-tasks
+module shift/go-basics/testing
 
 go 1.24.1
 

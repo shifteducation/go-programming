@@ -3,29 +3,33 @@ package main
 import (
 	"fmt"
 	fanoutfanin "shift/go-basics/goroutines/fan-out-fan-in"
-	"time"
+	"sync"
 )
 
 func main() {
-	testGoroutines()
 	checkClose()
 	fanOutFanIn()
+	checkMutexWithMap()
 }
 
-func testGoroutines() {
-	ch := make(chan int)
+func checkMutexWithMap() {
+	mutex := sync.Mutex{}
+	ints := make(map[int]struct{})
 
-	go func() {
-		ints := []int{1, 2, 3, 4}
-		for _, num := range ints {
-			ch <- num
-		}
-		close(ch)
-	}()
+	wg := sync.WaitGroup{}
+	count := 10
+	wg.Add(count)
 
-	for num := range ch {
-		fmt.Println(num)
+	for i := 0; i < count; i++ {
+		go func(i int) {
+			defer wg.Done()
+			defer mutex.Unlock()
+			mutex.Lock()
+			ints[i] = struct{}{}
+		}(i)
 	}
+	wg.Wait()
+	fmt.Println(len(ints))
 }
 
 func checkClose() {
@@ -35,7 +39,7 @@ func checkClose() {
 		for i := 0; i < 10; i++ {
 			ch <- i
 		}
-		close(ch)
+		// close(ch) // try to comment - deadlock
 	}()
 
 	for i := range ch {
@@ -55,9 +59,7 @@ func fanOutFanIn() {
 	c2 := fanoutfanin.Square(in)
 
 	// Consume the merged output from c1 and c2.
-	//for n := range fanoutfanin.Merge(c1, c2) {
-	//	fmt.Println(n) // 4 then 9, or 9 then 4
-	//}
-	fmt.Println(<-fanoutfanin.Merge(c1, c2))
-	time.Sleep(time.Second)
+	for n := range fanoutfanin.Merge(c1, c2) {
+		fmt.Println(n)
+	}
 }
